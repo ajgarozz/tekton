@@ -4,14 +4,17 @@ metadata:
   name: ci-pipeline
 spec:
   params:
-    - name: revision
+    - name: gitapikey
+    - name: sha
   tasks:
     - name: ci
       taskRef:
         name: ci
       params:
-        - name: revision
-          value: $(params.revision)
+        - name: gitapikey
+          value: $(params.gitapikey)
+        - name: sha
+          value: $(params.sha)
 ---
 apiVersion: tekton.dev/v1beta1
 kind: TriggerTemplate
@@ -19,36 +22,21 @@ metadata:
   name: ci-template
 spec:
   params:
-    - name: revision
+    - name: gitApiKey
+    - name: sha
   resourcetemplates:
     - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
-      # https://developer.ibm.com/technologies/containers/tutorials/knative-build-app-development-with-tekton/
-      # The PipelineRun resource does not have a fixed name. It uses generateName to generate a name each time it
-      # is created. Why? A particular PipelineRun resource executes the pipeline only once. If you want to run the
-      # pipeline again, you cannot modify an existing PipelineRun resource to request it to re-run. Instead, you
-      # must create another PipelineRun resource. You could use name to assign a unique name to your PipelineRun
-      # each time you create one, but it is much easier to use generateName.
       metadata:
         generateName: ci-
       spec:
-        params:
-        - name: revision
-          value: $(params.revision)
         pipelineRef:
           name: ci-pipeline
----
-apiVersion: tekton.dev/v1beta1
-kind: TriggerBinding
-metadata:
-  name: binding
-spec:
-  params:
-    - name: repository
-      value: "https://github.ibm.com/whc-toolchain/whc-developer-toolchain-CI"
-    - name: revision
-      value: "$(event.ref)" # /refs/head/<branch>
-      # value: "$(event.branch)" # /refs/head/<branch>
+        params:
+          - name: gitapikey
+            value: $(params.gitApiKey)
+          - name: sha
+            value: $(params.sha)
 ---
 apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding
@@ -66,6 +54,8 @@ spec:
       value: "github-pullrequest"
     - name: prnum
       value: "$(event.number)"
+    - name: sha
+      value: "$(head.sha)"
 ---
 apiVersion: tekton.dev/v1beta1
 kind: EventListener
@@ -79,23 +69,10 @@ spec:
         name: ci-template
 ---
 apiVersion: tekton.dev/v1beta1
-kind: EventListener
-metadata:
-  name: ci
-spec:
-  triggers:
-    - binding:
-        name: binding
-      template:
-        name: ci-template
----
-apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
   name: ci
 spec:
-  params:
-    - name: revision
   steps:
     - name: git-sync
       image: ibmcom/pipeline-base-image:2.6
@@ -104,4 +81,17 @@ spec:
       args:
         - -cxe
         - | 
-          echo hello world
+          gitApiKey="$(params.gitapikey)"
+          sha="$(params.sha)"
+
+          curl -X POST -H "Accept: application/vnd.github.v3+json" https://${gitApiKey}@api.github.com/repos/ajgarozz/tekton/statuses/${commitid} -d '{"state":"pending", "context":"this"}'
+          curl -X POST -H "Accept: application/vnd.github.v3+json" https://${gitApiKey}@api.github.com/repos/ajgarozz/tekton/statuses/${commitid} -d '{"state":"pending", "context":"is"}'
+          curl -X POST -H "Accept: application/vnd.github.v3+json" https://${gitApiKey}@api.github.com/repos/ajgarozz/tekton/statuses/${commitid} -d '{"state":"pending", "context":"an"}'
+          curl -X POST -H "Accept: application/vnd.github.v3+json" https://${gitApiKey}@api.github.com/repos/ajgarozz/tekton/statuses/${commitid} -d '{"state":"pending", "context":"example"}'
+
+          sleep 5
+
+          curl -X POST -H "Accept: application/vnd.github.v3+json" https://${gitApiKey}@api.github.com/repos/ajgarozz/tekton/statuses/${commitid} -d '{"state":"success", "context":"this"}'
+          curl -X POST -H "Accept: application/vnd.github.v3+json" https://${gitApiKey}@api.github.com/repos/ajgarozz/tekton/statuses/${commitid} -d '{"state":"success", "context":"is"}'
+          curl -X POST -H "Accept: application/vnd.github.v3+json" https://${gitApiKey}@api.github.com/repos/ajgarozz/tekton/statuses/${commitid} -d '{"state":"success", "context":"an"}'
+          curl -X POST -H "Accept: application/vnd.github.v3+json" https://${gitApiKey}@api.github.com/repos/ajgarozz/tekton/statuses/${commitid} -d '{"state":"failure", "context":"example"}'
