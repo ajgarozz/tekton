@@ -51,6 +51,34 @@ spec:
       # value: "$(event.branch)" # /refs/head/<branch>
 ---
 apiVersion: tekton.dev/v1beta1
+kind: TriggerBinding
+metadata:
+  name: binding-ci-github-pr
+spec:
+  params:
+    - name: repository
+      value: "$(event.pull_request.base.repo.clone_url)"
+    - name: branch
+      value: "$(event.pull_request.base.ref)"
+    - name: revision
+      value: "$(event.pull_request.head.sha)"
+    - name: triggerName
+      value: "github-pullrequest"
+    - name: prnum
+      value: "$(event.number)"
+---
+apiVersion: tekton.dev/v1beta1
+kind: EventListener
+metadata:
+  name: ci-git-pr
+spec:
+  triggers:
+    - binding:
+        name: binding-ci-github-pr
+      template:
+        name: ci-template
+---
+apiVersion: tekton.dev/v1beta1
 kind: EventListener
 metadata:
   name: ci
