@@ -23,12 +23,6 @@ spec:
   resourcetemplates:
     - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
-      # https://developer.ibm.com/technologies/containers/tutorials/knative-build-app-development-with-tekton/
-      # The PipelineRun resource does not have a fixed name. It uses generateName to generate a name each time it
-      # is created. Why? A particular PipelineRun resource executes the pipeline only once. If you want to run the
-      # pipeline again, you cannot modify an existing PipelineRun resource to request it to re-run. Instead, you
-      # must create another PipelineRun resource. You could use name to assign a unique name to your PipelineRun
-      # each time you create one, but it is much easier to use generateName.
       metadata:
         generateName: ci-
       spec:
@@ -45,10 +39,9 @@ metadata:
 spec:
   params:
     - name: repository
-      value: "https://github.ibm.com/whc-toolchain/whc-developer-toolchain-CI"
+      value: "https://github.com/ajgarozz/tekton"
     - name: revision
       value: "$(event.ref)" # /refs/head/<branch>
-      # value: "$(event.branch)" # /refs/head/<branch>
 ---
 apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding
