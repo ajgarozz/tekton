@@ -84,4 +84,4 @@ spec:
       args:
         - -cxe
         - | 
-          echo hello world
+          ls -laR /workspace/
