@@ -88,19 +88,13 @@ spec:
           sha="$(params.sha)"
 
           curl -X POST -H "Accept: application/vnd.github.v3+json" https://${gitapikey}@api.github.com/repos/ajgarozz/tekton/statuses/${sha} -d '{"state":"pending", "context":"this"}'
-          sleep 1
           curl -X POST -H "Accept: application/vnd.github.v3+json" https://${gitapikey}@api.github.com/repos/ajgarozz/tekton/statuses/${sha} -d '{"state":"pending", "context":"is"}'
-          sleep 1
           curl -X POST -H "Accept: application/vnd.github.v3+json" https://${gitapikey}@api.github.com/repos/ajgarozz/tekton/statuses/${sha} -d '{"state":"pending", "context":"an"}'
-          sleep 1
           curl -X POST -H "Accept: application/vnd.github.v3+json" https://${gitapikey}@api.github.com/repos/ajgarozz/tekton/statuses/${sha} -d '{"state":"pending", "context":"example"}'
 
           sleep 10
 
-          curl -X POST -H "Accept: application/vnd.github.v3+json" https://${gitapikey}@api.github.com/repos/ajgarozz/tekton/statuses/${sha} -d '{"state":"success", "context":"this"}'
-          sleep 1
-          curl -X POST -H "Accept: application/vnd.github.v3+json" https://${gitapikey}@api.github.com/repos/ajgarozz/tekton/statuses/${sha} -d '{"state":"success", "context":"is"}'
-          sleep 1
-          curl -X POST -H "Accept: application/vnd.github.v3+json" https://${gitapikey}@api.github.com/repos/ajgarozz/tekton/statuses/${sha} -d '{"state":"success", "context":"an"}'
-          sleep 1
-          curl -X POST -H "Accept: application/vnd.github.v3+json" https://${gitapikey}@api.github.com/repos/ajgarozz/tekton/statuses/${sha} -d '{"state":"failure", "context":"example"}'
+          curl -X POST -H "Accept: application/vnd.github.v3+json" https://${gitapikey}@api.github.com/repos/ajgarozz/tekton/statuses/${sha} -d '{"state":"success", "context":"this","target_url":"http://somepath.goes.here"}'
+          curl -X POST -H "Accept: application/vnd.github.v3+json" https://${gitapikey}@api.github.com/repos/ajgarozz/tekton/statuses/${sha} -d '{"state":"success", "context":"is", "target_url":"http://somepath.goes.here"}'
+          curl -X POST -H "Accept: application/vnd.github.v3+json" https://${gitapikey}@api.github.com/repos/ajgarozz/tekton/statuses/${sha} -d '{"state":"success", "context":"an", "target_url":"http://somepath.goes.here"}'
+          curl -X POST -H "Accept: application/vnd.github.v3+json" https://${gitapikey}@api.github.com/repos/ajgarozz/tekton/statuses/${sha} -d '{"state":"failure", "context":"example", "target_url":"http://somepath.goes.here"}'
