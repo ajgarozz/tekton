@@ -3,45 +3,24 @@ kind: Pipeline
 metadata:
   name: ci-pipeline
 spec:
-  params:
-    - name: revision
   tasks:
     - name: ci
       taskRef:
         name: ci
-      params:
-        - name: revision
-          value: $(params.revision)
 ---
 apiVersion: tekton.dev/v1beta1
 kind: TriggerTemplate
 metadata:
   name: ci-template
 spec:
-  params:
-    - name: revision
   resourcetemplates:
     - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
       metadata:
         generateName: ci-
       spec:
-        params:
-        - name: revision
-          value: $(params.revision)
         pipelineRef:
           name: ci-pipeline
----
-apiVersion: tekton.dev/v1beta1
-kind: TriggerBinding
-metadata:
-  name: binding
-spec:
-  params:
-    - name: repository
-      value: "https://github.com/ajgarozz/tekton"
-    - name: revision
-      value: "$(event.ref)" # /refs/head/<branch>
 ---
 apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding
@@ -68,17 +47,6 @@ spec:
   triggers:
     - binding:
         name: binding-ci-github-pr
-      template:
-        name: ci-template
----
-apiVersion: tekton.dev/v1beta1
-kind: EventListener
-metadata:
-  name: ci
-spec:
-  triggers:
-    - binding:
-        name: binding
       template:
         name: ci-template
 ---
