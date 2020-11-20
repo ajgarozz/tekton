@@ -1,0 +1,115 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: ci-pipeline
+spec:
+  params:
+    - name: revision
+  tasks:
+    - name: ci
+      taskRef:
+        name: ci
+      params:
+        - name: revision
+          value: $(params.revision)
+---
+Skip to content
+ Enterprise
+Search or jump to…
+
+Pull requests
+Issues
+Explore
+ 
+@ajgarozz 
+ajgarozz
+/
+hello-world-tekton-framework
+1
+0
+0
+ Code
+ Issues 0
+ Pull requests 0
+ Projects 0
+ Wiki
+ Insights
+ Settings
+hello-world-tekton-framework/.tekton/ci-pipelinerun.yaml
+@ajgarozz ajgarozz Update ci-pipelinerun.yaml
+428eb2b on Jul 8
+48 lines (48 sloc)  1.51 KB
+  
+apiVersion: tekton.dev/v1beta1
+kind: TriggerTemplate
+metadata:
+  name: ci-template
+spec:
+  params:
+    - name: revision
+  resourcetemplates:
+    - apiVersion: tekton.dev/v1beta1
+      kind: PipelineRun
+      # https://developer.ibm.com/technologies/containers/tutorials/knative-build-app-development-with-tekton/
+      # The PipelineRun resource does not have a fixed name. It uses generateName to generate a name each time it
+      # is created. Why? A particular PipelineRun resource executes the pipeline only once. If you want to run the
+      # pipeline again, you cannot modify an existing PipelineRun resource to request it to re-run. Instead, you
+      # must create another PipelineRun resource. You could use name to assign a unique name to your PipelineRun
+      # each time you create one, but it is much easier to use generateName.
+      metadata:
+        generateName: ci-$(body.head_commit.id)-
+      spec:
+        params:
+        - name: revision
+          value: $(params.revision)
+        pipelineRef:
+          name: ci-pipeline
+---
+# 2
+apiVersion: tekton.dev/v1beta1
+kind: TriggerBinding
+metadata:
+  name: binding
+spec:
+  params:
+    - name: repository
+      value: "https://github.ibm.com/whc-toolchain/whc-developer-toolchain-CI"
+    - name: revision
+      value: "$(event.ref)" # /refs/head/<branch>
+      # value: "$(event.branch)" # /refs/head/<branch>
+---
+apiVersion: tekton.dev/v1beta1
+kind: EventListener
+metadata:
+  name: ci
+spec:
+  triggers:
+    - binding:
+        name: binding
+      template:
+        name: ci-template
+© 2020 GitHub, Inc.
+Help
+Support
+API
+Training
+Blog
+About
+GitHub Enterprise Server 2.21.11
+---
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: ci
+spec:
+  params:
+    - name: revision
+  steps:
+    - name: git-sync
+      image: ibmcom/pipeline-base-image:2.6
+      command:
+        - bash
+      args:
+        - -cxe
+        - | 
+          echo $(echo "$(params.revision)" | cut -d "/" -f 3)
