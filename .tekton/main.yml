@@ -76,4 +76,4 @@ spec:
       args:
         - -cxe
         - | 
-          echo $(echo "$(params.revision)" | cut -d "/" -f 3)
+          echo hello world
