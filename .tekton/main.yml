@@ -64,3 +64,11 @@ spec:
         - -cxe
         - | 
           echo hello world
+          
+          cat <<EOF > /workspace/output/pr/status/tekton.json
+          {
+            "ID": "tekton",
+            "Code": "success",
+            "Description": "Tekton is running"
+          }
+          EOF
