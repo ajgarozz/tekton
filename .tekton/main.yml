@@ -1,3 +1,14 @@
+apiVersion: tekton.dev/v1alpha1
+kind: PipelineResource
+metadata:
+  name: ajgarozz-pr
+  namespace: default
+spec:
+  type: pullRequest
+  params:
+    - name: url
+      value: https://github.com/ajgarozz/tekton/pulls/2
+---
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
