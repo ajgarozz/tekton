@@ -55,7 +55,7 @@ spec:
     - name: prnum
       value: "$(event.number)"
     - name: sha
-      value: "$(head.sha)"
+      value: "$(event.pull_request.head.sha)"
 ---
 apiVersion: tekton.dev/v1beta1
 kind: EventListener
