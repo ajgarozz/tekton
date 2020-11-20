@@ -30,7 +30,7 @@ spec:
       # must create another PipelineRun resource. You could use name to assign a unique name to your PipelineRun
       # each time you create one, but it is much easier to use generateName.
       metadata:
-        generateName: ci-$(body.head_commit.id)-
+        generateName: ci-
       spec:
         params:
         - name: revision
@@ -38,7 +38,6 @@ spec:
         pipelineRef:
           name: ci-pipeline
 ---
-# 2
 apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding
 metadata:
