@@ -22,7 +22,7 @@ metadata:
   name: ci-template
 spec:
   params:
-    - name: gitApiKey
+    - name: gitapikey
     - name: sha
   resourcetemplates:
     - apiVersion: tekton.dev/v1beta1
@@ -34,7 +34,7 @@ spec:
           name: ci-pipeline
         params:
           - name: gitapikey
-            value: $(params.gitApiKey)
+            value: $(params.gitapikey)
           - name: sha
             value: $(params.sha)
 ---
@@ -73,6 +73,9 @@ kind: Task
 metadata:
   name: ci
 spec:
+  params:
+    - name: gitapikey
+    - name: sha
   steps:
     - name: git-sync
       image: ibmcom/pipeline-base-image:2.6
@@ -81,17 +84,17 @@ spec:
       args:
         - -cxe
         - | 
-          gitApiKey="$(params.gitapikey)"
+          gitapikey="$(params.gitapikey)"
           sha="$(params.sha)"
 
-          curl -X POST -H "Accept: application/vnd.github.v3+json" https://${gitApiKey}@api.github.com/repos/ajgarozz/tekton/statuses/${sha} -d '{"state":"pending", "context":"this"}'
-          curl -X POST -H "Accept: application/vnd.github.v3+json" https://${gitApiKey}@api.github.com/repos/ajgarozz/tekton/statuses/${sha} -d '{"state":"pending", "context":"is"}'
-          curl -X POST -H "Accept: application/vnd.github.v3+json" https://${gitApiKey}@api.github.com/repos/ajgarozz/tekton/statuses/${sha} -d '{"state":"pending", "context":"an"}'
-          curl -X POST -H "Accept: application/vnd.github.v3+json" https://${gitApiKey}@api.github.com/repos/ajgarozz/tekton/statuses/${sha} -d '{"state":"pending", "context":"example"}'
+          curl -X POST -H "Accept: application/vnd.github.v3+json" https://${gitapikey}@api.github.com/repos/ajgarozz/tekton/statuses/${sha} -d '{"state":"pending", "context":"this"}'
+          curl -X POST -H "Accept: application/vnd.github.v3+json" https://${gitapikey}@api.github.com/repos/ajgarozz/tekton/statuses/${sha} -d '{"state":"pending", "context":"is"}'
+          curl -X POST -H "Accept: application/vnd.github.v3+json" https://${gitapikey}@api.github.com/repos/ajgarozz/tekton/statuses/${sha} -d '{"state":"pending", "context":"an"}'
+          curl -X POST -H "Accept: application/vnd.github.v3+json" https://${gitapikey}@api.github.com/repos/ajgarozz/tekton/statuses/${sha} -d '{"state":"pending", "context":"example"}'
 
           sleep 5
 
-          curl -X POST -H "Accept: application/vnd.github.v3+json" https://${gitApiKey}@api.github.com/repos/ajgarozz/tekton/statuses/${sha} -d '{"state":"success", "context":"this"}'
-          curl -X POST -H "Accept: application/vnd.github.v3+json" https://${gitApiKey}@api.github.com/repos/ajgarozz/tekton/statuses/${sha} -d '{"state":"success", "context":"is"}'
-          curl -X POST -H "Accept: application/vnd.github.v3+json" https://${gitApiKey}@api.github.com/repos/ajgarozz/tekton/statuses/${sha} -d '{"state":"success", "context":"an"}'
-          curl -X POST -H "Accept: application/vnd.github.v3+json" https://${gitApiKey}@api.github.com/repos/ajgarozz/tekton/statuses/${sha} -d '{"state":"failure", "context":"example"}'
+          curl -X POST -H "Accept: application/vnd.github.v3+json" https://${gitapikey}@api.github.com/repos/ajgarozz/tekton/statuses/${sha} -d '{"state":"success", "context":"this"}'
+          curl -X POST -H "Accept: application/vnd.github.v3+json" https://${gitapikey}@api.github.com/repos/ajgarozz/tekton/statuses/${sha} -d '{"state":"success", "context":"is"}'
+          curl -X POST -H "Accept: application/vnd.github.v3+json" https://${gitapikey}@api.github.com/repos/ajgarozz/tekton/statuses/${sha} -d '{"state":"success", "context":"an"}'
+          curl -X POST -H "Accept: application/vnd.github.v3+json" https://${gitapikey}@api.github.com/repos/ajgarozz/tekton/statuses/${sha} -d '{"state":"failure", "context":"example"}'
