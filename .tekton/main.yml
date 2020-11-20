@@ -13,33 +13,6 @@ spec:
         - name: revision
           value: $(params.revision)
 ---
-Skip to content
- Enterprise
-Search or jump to…
-
-Pull requests
-Issues
-Explore
- 
-@ajgarozz 
-ajgarozz
-/
-hello-world-tekton-framework
-1
-0
-0
- Code
- Issues 0
- Pull requests 0
- Projects 0
- Wiki
- Insights
- Settings
-hello-world-tekton-framework/.tekton/ci-pipelinerun.yaml
-@ajgarozz ajgarozz Update ci-pipelinerun.yaml
-428eb2b on Jul 8
-48 lines (48 sloc)  1.51 KB
-  
 apiVersion: tekton.dev/v1beta1
 kind: TriggerTemplate
 metadata:
@@ -88,14 +61,6 @@ spec:
         name: binding
       template:
         name: ci-template
-© 2020 GitHub, Inc.
-Help
-Support
-API
-Training
-Blog
-About
-GitHub Enterprise Server 2.21.11
 ---
 apiVersion: tekton.dev/v1beta1
 kind: Task
