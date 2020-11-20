@@ -55,6 +55,16 @@ kind: Task
 metadata:
   name: ci
 spec:
+  inputs:
+    resources:
+    - name: repo
+      type: git
+    - name: pr
+      type: pullRequest
+  outputs:
+    resources:
+    - name: pr
+      type: pullRequest
   steps:
     - name: git-sync
       image: ibmcom/pipeline-base-image:2.6
@@ -64,11 +74,3 @@ spec:
         - -cxe
         - | 
           echo hello world
-          
-          cat <<EOF > /workspace/output/pr/status/tekton.json
-          {
-            "ID": "tekton",
-            "Code": "success",
-            "Description": "Tekton is running"
-          }
-          EOF
