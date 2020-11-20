@@ -55,8 +55,6 @@ kind: Task
 metadata:
   name: ci
 spec:
-  params:
-    - name: revision
   steps:
     - name: git-sync
       image: ibmcom/pipeline-base-image:2.6
