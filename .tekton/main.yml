@@ -87,13 +87,13 @@ spec:
           gitapikey="$(params.gitapikey)"
           sha="$(params.sha)"
 
-          curl -X POST -H "Accept: application/vnd.github.v3+json" https://${gitapikey}@api.github.com/repos/ajgarozz/tekton/statuses/${sha} -d '{"state":"pending", "context":"this"}'
-          curl -X POST -H "Accept: application/vnd.github.v3+json" https://${gitapikey}@api.github.com/repos/ajgarozz/tekton/statuses/${sha} -d '{"state":"pending", "context":"is"}'
-          curl -X POST -H "Accept: application/vnd.github.v3+json" https://${gitapikey}@api.github.com/repos/ajgarozz/tekton/statuses/${sha} -d '{"state":"pending", "context":"an"}'
-          curl -X POST -H "Accept: application/vnd.github.v3+json" https://${gitapikey}@api.github.com/repos/ajgarozz/tekton/statuses/${sha} -d '{"state":"pending", "context":"example"}'
+          curl -X POST -H "Accept: application/vnd.github.v3+json" https://${gitapikey}@api.github.com/repos/ajgarozz/tekton/statuses/${sha} -d '{"state":"pending", "context":"build"}'
+          curl -X POST -H "Accept: application/vnd.github.v3+json" https://${gitapikey}@api.github.com/repos/ajgarozz/tekton/statuses/${sha} -d '{"state":"pending", "context":"deploy"}'
+          curl -X POST -H "Accept: application/vnd.github.v3+json" https://${gitapikey}@api.github.com/repos/ajgarozz/tekton/statuses/${sha} -d '{"state":"pending", "context":"test"}'
+          curl -X POST -H "Accept: application/vnd.github.v3+json" https://${gitapikey}@api.github.com/repos/ajgarozz/tekton/statuses/${sha} -d '{"state":"pending", "context":"validate"}'
 
           sleep 10
-    - name: this
+    - name: build
       image: ibmcom/pipeline-base-image:2.6
       command:
         - bash
@@ -104,8 +104,8 @@ spec:
           sha="$(params.sha)"
 
 
-          curl -X POST -H "Accept: application/vnd.github.v3+json" https://${gitapikey}@api.github.com/repos/ajgarozz/tekton/statuses/${sha} -d '{"state":"success", "context":"this","target_url":"http://somepath.goes.here"}'
-    - name: is
+          curl -X POST -H "Accept: application/vnd.github.v3+json" https://${gitapikey}@api.github.com/repos/ajgarozz/tekton/statuses/${sha} -d '{"state":"success", "context":"build","target_url":"http://somepath.goes.here"}'
+    - name: deploy
       image: ibmcom/pipeline-base-image:2.6
       command:
         - bash
@@ -115,8 +115,8 @@ spec:
           gitapikey="$(params.gitapikey)"
           sha="$(params.sha)"
 
-          curl -X POST -H "Accept: application/vnd.github.v3+json" https://${gitapikey}@api.github.com/repos/ajgarozz/tekton/statuses/${sha} -d '{"state":"success", "context":"is", "target_url":"http://somepath.goes.here"}'
-    - name: an
+          curl -X POST -H "Accept: application/vnd.github.v3+json" https://${gitapikey}@api.github.com/repos/ajgarozz/tekton/statuses/${sha} -d '{"state":"success", "context":"deploy", "target_url":"http://somepath.goes.here"}'
+    - name: test
       image: ibmcom/pipeline-base-image:2.6
       command:
         - bash
@@ -126,8 +126,8 @@ spec:
           gitapikey="$(params.gitapikey)"
           sha="$(params.sha)"
 
-          curl -X POST -H "Accept: application/vnd.github.v3+json" https://${gitapikey}@api.github.com/repos/ajgarozz/tekton/statuses/${sha} -d '{"state":"success", "context":"an", "target_url":"http://somepath.goes.here"}'
-    - name: example
+          curl -X POST -H "Accept: application/vnd.github.v3+json" https://${gitapikey}@api.github.com/repos/ajgarozz/tekton/statuses/${sha} -d '{"state":"success", "context":"test", "target_url":"http://somepath.goes.here"}'
+    - name: validate
       image: ibmcom/pipeline-base-image:2.6
       command:
         - bash
@@ -137,4 +137,4 @@ spec:
           gitapikey="$(params.gitapikey)"
           sha="$(params.sha)"
 
-          curl -X POST -H "Accept: application/vnd.github.v3+json" https://${gitapikey}@api.github.com/repos/ajgarozz/tekton/statuses/${sha} -d '{"state":"failure", "context":"example", "target_url":"http://somepath.goes.here"}'
+          curl -X POST -H "Accept: application/vnd.github.v3+json" https://${gitapikey}@api.github.com/repos/ajgarozz/tekton/statuses/${sha} -d '{"state":"failure", "context":"validate", "target_url":"http://somepath.goes.here"}'
