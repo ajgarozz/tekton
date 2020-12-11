@@ -87,10 +87,10 @@ spec:
           gitapikey="$(params.gitapikey)"
           sha="$(params.sha)"
 
-          curl -X POST -H "Accept: application/vnd.github.v3+json" https://${gitapikey}@api.github.com/repos/ajgarozz/tekton/statuses/${sha} -d '{"state":"pending", "context":"build"}'
-          curl -X POST -H "Accept: application/vnd.github.v3+json" https://${gitapikey}@api.github.com/repos/ajgarozz/tekton/statuses/${sha} -d '{"state":"pending", "context":"deploy"}'
-          curl -X POST -H "Accept: application/vnd.github.v3+json" https://${gitapikey}@api.github.com/repos/ajgarozz/tekton/statuses/${sha} -d '{"state":"pending", "context":"test"}'
-          curl -X POST -H "Accept: application/vnd.github.v3+json" https://${gitapikey}@api.github.com/repos/ajgarozz/tekton/statuses/${sha} -d '{"state":"pending", "context":"validate"}'
+          curl -X POST -H "Accept: application/vnd.github.v3+json" https://${gitapikey}@api.github.com/repos/Alvearie/alvearie-starter-app/statuses/${sha} -d '{"state":"pending", "context":"build"}'
+          curl -X POST -H "Accept: application/vnd.github.v3+json" https://${gitapikey}@api.github.com/repos/Alvearie/alvearie-starter-app/statuses/${sha} -d '{"state":"pending", "context":"deploy"}'
+          curl -X POST -H "Accept: application/vnd.github.v3+json" https://${gitapikey}@api.github.com/repos/Alvearie/alvearie-starter-app/statuses/${sha} -d '{"state":"pending", "context":"test"}'
+          curl -X POST -H "Accept: application/vnd.github.v3+json" https://${gitapikey}@api.github.com/repos/Alvearie/alvearie-starter-app/statuses/${sha} -d '{"state":"pending", "context":"validate"}'
 
           sleep 10
     - name: build
@@ -104,7 +104,7 @@ spec:
           sha="$(params.sha)"
 
 
-          curl -X POST -H "Accept: application/vnd.github.v3+json" https://${gitapikey}@api.github.com/repos/ajgarozz/tekton/statuses/${sha} -d '{"state":"success", "context":"build","target_url":"http://somepath.goes.here"}'
+          curl -X POST -H "Accept: application/vnd.github.v3+json" https://${gitapikey}@api.github.com/repos/Alvearie/alvearie-starter-app/statuses/${sha} -d '{"state":"success", "context":"build","target_url":"http://somepath.goes.here"}'
     - name: deploy
       image: ibmcom/pipeline-base-image:2.6
       command:
@@ -115,7 +115,7 @@ spec:
           gitapikey="$(params.gitapikey)"
           sha="$(params.sha)"
 
-          curl -X POST -H "Accept: application/vnd.github.v3+json" https://${gitapikey}@api.github.com/repos/ajgarozz/tekton/statuses/${sha} -d '{"state":"success", "context":"deploy", "target_url":"http://somepath.goes.here"}'
+          curl -X POST -H "Accept: application/vnd.github.v3+json" https://${gitapikey}@api.github.com/repos/Alvearie/alvearie-starter-app/statuses/${sha} -d '{"state":"success", "context":"deploy", "target_url":"http://somepath.goes.here"}'
     - name: test
       image: ibmcom/pipeline-base-image:2.6
       command:
@@ -126,7 +126,7 @@ spec:
           gitapikey="$(params.gitapikey)"
           sha="$(params.sha)"
 
-          curl -X POST -H "Accept: application/vnd.github.v3+json" https://${gitapikey}@api.github.com/repos/ajgarozz/tekton/statuses/${sha} -d '{"state":"success", "context":"test", "target_url":"http://somepath.goes.here"}'
+          curl -X POST -H "Accept: application/vnd.github.v3+json" https://${gitapikey}@api.github.com/repos/Alvearie/alvearie-starter-app/statuses/${sha} -d '{"state":"success", "context":"test", "target_url":"http://somepath.goes.here"}'
     - name: validate
       image: ibmcom/pipeline-base-image:2.6
       command:
@@ -137,4 +137,4 @@ spec:
           gitapikey="$(params.gitapikey)"
           sha="$(params.sha)"
 
-          curl -X POST -H "Accept: application/vnd.github.v3+json" https://${gitapikey}@api.github.com/repos/ajgarozz/tekton/statuses/${sha} -d '{"state":"failure", "context":"validate", "target_url":"http://somepath.goes.here"}'
+          curl -X POST -H "Accept: application/vnd.github.v3+json" https://${gitapikey}@api.github.com/repos/Alvearie/alvearie-starter-app/statuses/${sha} -d '{"state":"failure", "context":"validate", "target_url":"http://somepath.goes.here"}'
