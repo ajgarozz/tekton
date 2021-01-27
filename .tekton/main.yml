@@ -141,9 +141,9 @@ spec:
           context="deploy"
           targeturl="http://somepath.goes.here"
           if true; then
-            curl -X POST -H "Accept: application/vnd.github.v3+json" ${apiurlpass}/statuses/${sha} -d '{"state":"success", "context":"${context}","target_url":"${targeturl}"}'
+            curl -X POST -H "Accept: application/vnd.github.v3+json" ${apiurlpass}/statuses/${sha} -d "{\"state\":\"success\", \"context\":\"${context}\",\"target_url\":\"${targeturl}\"}"
           else
-            curl -X POST -H "Accept: application/vnd.github.v3+json" ${apiurlpass}/statuses/${sha} -d '{"state":"failure", "context":"${context}","target_url":"${targeturl}"}'
+            curl -X POST -H "Accept: application/vnd.github.v3+json" ${apiurlpass}/statuses/${sha} -d "{\"state\":\"failure\", \"context\":\"${context}\",\"target_url\":\"${targeturl}\"}"
           fi
     - name: test
       image: ibmcom/pipeline-base-image:2.6
@@ -161,9 +161,9 @@ spec:
           context="test"
           targeturl="http://somepath.goes.here"
           if true; then
-            curl -X POST -H "Accept: application/vnd.github.v3+json" ${apiurlpass}/statuses/${sha} -d '{"state":"success", "context":"${context}","target_url":"${targeturl}"}'
+            curl -X POST -H "Accept: application/vnd.github.v3+json" ${apiurlpass}/statuses/${sha} -d "{\"state\":\"success\", \"context\":\"${context}\",\"target_url\":\"${targeturl}\"}"
           else
-            curl -X POST -H "Accept: application/vnd.github.v3+json" ${apiurlpass}/statuses/${sha} -d '{"state":"failure", "context":"${context}","target_url":"${targeturl}"}'
+            curl -X POST -H "Accept: application/vnd.github.v3+json" ${apiurlpass}/statuses/${sha} -d "{\"state\":\"failure\", \"context\":\"${context}\",\"target_url\":\"${targeturl}\"}"
           fi
     - name: validate
       image: ibmcom/pipeline-base-image:2.6
@@ -181,7 +181,7 @@ spec:
           context="validate"
           targeturl="http://somepath.goes.here"
           if fail; then
-            curl -X POST -H "Accept: application/vnd.github.v3+json" ${apiurlpass}/statuses/${sha} -d '{"state":"success", "context":"${context}","target_url":"${targeturl}"}'
+            curl -X POST -H "Accept: application/vnd.github.v3+json" ${apiurlpass}/statuses/${sha} -d "{\"state\":\"success\", \"context\":\"${context}\",\"target_url\":\"${targeturl}\"}"
           else
-            curl -X POST -H "Accept: application/vnd.github.v3+json" ${apiurlpass}/statuses/${sha} -d '{"state":"failure", "context":"${context}","target_url":"${targeturl}"}'
+            curl -X POST -H "Accept: application/vnd.github.v3+json" ${apiurlpass}/statuses/${sha} -d "{\"state\":\"failure\", \"context\":\"${context}\",\"target_url\":\"${targeturl}\"}"
           fi
