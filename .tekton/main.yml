@@ -121,9 +121,9 @@ spec:
           context="build"
           targeturl="http://somepath.goes.here"
           if true; then
-            curl -X POST -H "Accept: application/vnd.github.v3+json" ${apiurlpass}/statuses/${sha} -d '{"state":"success", "context":"${context}","target_url":"${targeturl}"}'
+            curl -X POST -H "Accept: application/vnd.github.v3+json" ${apiurlpass}/statuses/${sha} -d "{\"state\":\"success\", \"context\":\"${context}\",\"target_url\":\"${targeturl}\"}"
           else
-            curl -X POST -H "Accept: application/vnd.github.v3+json" ${apiurlpass}/statuses/${sha} -d '{"state":"failure", "context":"${context}","target_url":"${targeturl}"}'
+            curl -X POST -H "Accept: application/vnd.github.v3+json" ${apiurlpass}/statuses/${sha} -d "{\"state\":\"failure\", \"context\":\"${context}\",\"target_url\":\"${targeturl}\"}"
           fi
     - name: deploy
       image: ibmcom/pipeline-base-image:2.6
