@@ -113,9 +113,9 @@ spec:
           
           REPO_URL=${USER_GIT_REPO:0:8}${gitApiKey}@${USER_GIT_REPO:8}
           git clone ${REPO_URL} /workspace/
+          cd /workspace/
           git checkout $(echo "${revision}" | cut -d "/" -f 3)
           
-          cd /workspace/
           echo "export GIT_BRANCH=$(git branch -a | grep ^* | cut -d " " -f 2)" >> git.props
           echo "export GIT_COMMIT=$(git rev-parse HEAD)" >> git.props
           echo "export GIT_URL=\"${USER_GIT_REPO}\"" >> git.props
