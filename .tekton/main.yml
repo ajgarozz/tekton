@@ -6,6 +6,7 @@ spec:
   params:
     - name: gitapikey
     - name: sha
+    - name: apiurl
   tasks:
     - name: ci
       taskRef:
@@ -15,6 +16,8 @@ spec:
           value: $(params.gitapikey)
         - name: sha
           value: $(params.sha)
+        - name: apiurl
+          value: $(params.apiurl)
 ---
 apiVersion: tekton.dev/v1beta1
 kind: TriggerTemplate
@@ -24,6 +27,7 @@ spec:
   params:
     - name: gitapikey
     - name: sha
+    - name: apiurl
   resourcetemplates:
     - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
@@ -37,6 +41,8 @@ spec:
             value: $(params.gitapikey)
           - name: sha
             value: $(params.sha)
+          - name: apiurl
+            value: $(params.apiurl)
 ---
 apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding
@@ -56,6 +62,8 @@ spec:
       value: "$(event.number)"
     - name: sha
       value: "$(event.pull_request.head.sha)"
+    - name: apiurl
+      value: "$(event.pull_request.base.url)"
 ---
 apiVersion: tekton.dev/v1beta1
 kind: EventListener
@@ -76,6 +84,7 @@ spec:
   params:
     - name: gitapikey
     - name: sha
+    - name: apiurl
   steps:
     - name: init-pending-statuses
       image: ibmcom/pipeline-base-image:2.6
@@ -86,11 +95,14 @@ spec:
         - | 
           gitapikey="$(params.gitapikey)"
           sha="$(params.sha)"
+          apiurl="$(params.apiurl)"
+          
+          apiurlpass=${apiurl:0:8}${gitapikey}@${apiurl:8}
 
-          curl -X POST -H "Accept: application/vnd.github.v3+json" https://${gitapikey}@api.github.com/repos/ajgarozz/alvearie-starter-app/statuses/${sha} -d '{"state":"pending", "context":"build"}'
-          curl -X POST -H "Accept: application/vnd.github.v3+json" https://${gitapikey}@api.github.com/repos/ajgarozz/alvearie-starter-app/statuses/${sha} -d '{"state":"pending", "context":"deploy"}'
-          curl -X POST -H "Accept: application/vnd.github.v3+json" https://${gitapikey}@api.github.com/repos/ajgarozz/alvearie-starter-app/statuses/${sha} -d '{"state":"pending", "context":"test"}'
-          curl -X POST -H "Accept: application/vnd.github.v3+json" https://${gitapikey}@api.github.com/repos/ajgarozz/alvearie-starter-app/statuses/${sha} -d '{"state":"pending", "context":"validate"}'
+          curl -X POST -H "Accept: application/vnd.github.v3+json" ${apiurlpass}/statuses/${sha} -d '{"state":"pending", "context":"build"}'
+          curl -X POST -H "Accept: application/vnd.github.v3+json" ${apiurlpass}/statuses/${sha} -d '{"state":"pending", "context":"deploy"}'
+          curl -X POST -H "Accept: application/vnd.github.v3+json" ${apiurlpass}/statuses/${sha} -d '{"state":"pending", "context":"test"}'
+          curl -X POST -H "Accept: application/vnd.github.v3+json" ${apiurlpass}/statuses/${sha} -d '{"state":"pending", "context":"validate"}'
 
           sleep 10
     - name: build
@@ -102,9 +114,11 @@ spec:
         - | 
           gitapikey="$(params.gitapikey)"
           sha="$(params.sha)"
+          apiurl="$(params.apiurl)"
+          
+          apiurlpass=${apiurl:0:8}${gitapikey}@${apiurl:8}
 
-
-          curl -X POST -H "Accept: application/vnd.github.v3+json" https://${gitapikey}@api.github.com/repos/ajgarozz/alvearie-starter-app/statuses/${sha} -d '{"state":"success", "context":"build","target_url":"http://somepath.goes.here"}'
+          curl -X POST -H "Accept: application/vnd.github.v3+json" ${apiurlpass}/statuses/${sha} -d '{"state":"success", "context":"build","target_url":"http://somepath.goes.here"}'
     - name: deploy
       image: ibmcom/pipeline-base-image:2.6
       command:
@@ -114,8 +128,11 @@ spec:
         - | 
           gitapikey="$(params.gitapikey)"
           sha="$(params.sha)"
+          apiurl="$(params.apiurl)"
+          
+          apiurlpass=${apiurl:0:8}${gitapikey}@${apiurl:8}
 
-          curl -X POST -H "Accept: application/vnd.github.v3+json" https://${gitapikey}@api.github.com/repos/ajgarozz/alvearie-starter-app/statuses/${sha} -d '{"state":"success", "context":"deploy", "target_url":"http://somepath.goes.here"}'
+          curl -X POST -H "Accept: application/vnd.github.v3+json" ${apiurlpass}/statuses/${sha} -d '{"state":"success", "context":"deploy", "target_url":"http://somepath.goes.here"}'
     - name: test
       image: ibmcom/pipeline-base-image:2.6
       command:
@@ -125,8 +142,11 @@ spec:
         - | 
           gitapikey="$(params.gitapikey)"
           sha="$(params.sha)"
+          apiurl="$(params.apiurl)"
+          
+          apiurlpass=${apiurl:0:8}${gitapikey}@${apiurl:8}
 
-          curl -X POST -H "Accept: application/vnd.github.v3+json" https://${gitapikey}@api.github.com/repos/ajgarozz/alvearie-starter-app/statuses/${sha} -d '{"state":"success", "context":"test", "target_url":"http://somepath.goes.here"}'
+          curl -X POST -H "Accept: application/vnd.github.v3+json" ${apiurlpass}/statuses/${sha} -d '{"state":"success", "context":"test", "target_url":"http://somepath.goes.here"}'
     - name: validate
       image: ibmcom/pipeline-base-image:2.6
       command:
@@ -136,5 +156,8 @@ spec:
         - | 
           gitapikey="$(params.gitapikey)"
           sha="$(params.sha)"
+          apiurl="$(params.apiurl)"
+          
+          apiurlpass=${apiurl:0:8}${gitapikey}@${apiurl:8}
 
-          curl -X POST -H "Accept: application/vnd.github.v3+json" https://${gitapikey}@api.github.com/repos/ajgarozz/alvearie-starter-app/statuses/${sha} -d '{"state":"failure", "context":"validate", "target_url":"http://somepath.goes.here"}'
+          curl -X POST -H "Accept: application/vnd.github.v3+json" ${apiurlpass}/statuses/${sha} -d '{"state":"failure", "context":"validate", "target_url":"http://somepath.goes.here"}'
