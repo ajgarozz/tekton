@@ -63,7 +63,7 @@ spec:
     - name: sha
       value: "$(event.pull_request.head.sha)"
     - name: apiurl
-      value: "$(event.pull_request.base.url)"
+      value: "$(event.pull_request.base.repo.url)"
 ---
 apiVersion: tekton.dev/v1beta1
 kind: EventListener
