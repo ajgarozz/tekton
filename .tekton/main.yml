@@ -118,7 +118,13 @@ spec:
           
           apiurlpass=${apiurl:0:8}${gitapikey}@${apiurl:8}
 
-          curl -X POST -H "Accept: application/vnd.github.v3+json" ${apiurlpass}/statuses/${sha} -d '{"state":"success", "context":"build","target_url":"http://somepath.goes.here"}'
+          context="build"
+          targeturl="http://somepath.goes.here"
+          if true; then
+            curl -X POST -H "Accept: application/vnd.github.v3+json" ${apiurlpass}/statuses/${sha} -d '{"state":"success", "context":"${context}","target_url":"${targeturl}"}'
+          else
+            curl -X POST -H "Accept: application/vnd.github.v3+json" ${apiurlpass}/statuses/${sha} -d '{"state":"failure", "context":"${context}","target_url":"${targeturl}"}'
+          fi
     - name: deploy
       image: ibmcom/pipeline-base-image:2.6
       command:
@@ -132,7 +138,13 @@ spec:
           
           apiurlpass=${apiurl:0:8}${gitapikey}@${apiurl:8}
 
-          curl -X POST -H "Accept: application/vnd.github.v3+json" ${apiurlpass}/statuses/${sha} -d '{"state":"success", "context":"deploy", "target_url":"http://somepath.goes.here"}'
+          context="deploy"
+          targeturl="http://somepath.goes.here"
+          if true; then
+            curl -X POST -H "Accept: application/vnd.github.v3+json" ${apiurlpass}/statuses/${sha} -d '{"state":"success", "context":"${context}","target_url":"${targeturl}"}'
+          else
+            curl -X POST -H "Accept: application/vnd.github.v3+json" ${apiurlpass}/statuses/${sha} -d '{"state":"failure", "context":"${context}","target_url":"${targeturl}"}'
+          fi
     - name: test
       image: ibmcom/pipeline-base-image:2.6
       command:
@@ -146,7 +158,13 @@ spec:
           
           apiurlpass=${apiurl:0:8}${gitapikey}@${apiurl:8}
 
-          curl -X POST -H "Accept: application/vnd.github.v3+json" ${apiurlpass}/statuses/${sha} -d '{"state":"success", "context":"test", "target_url":"http://somepath.goes.here"}'
+          context="test"
+          targeturl="http://somepath.goes.here"
+          if true; then
+            curl -X POST -H "Accept: application/vnd.github.v3+json" ${apiurlpass}/statuses/${sha} -d '{"state":"success", "context":"${context}","target_url":"${targeturl}"}'
+          else
+            curl -X POST -H "Accept: application/vnd.github.v3+json" ${apiurlpass}/statuses/${sha} -d '{"state":"failure", "context":"${context}","target_url":"${targeturl}"}'
+          fi
     - name: validate
       image: ibmcom/pipeline-base-image:2.6
       command:
@@ -160,4 +178,10 @@ spec:
           
           apiurlpass=${apiurl:0:8}${gitapikey}@${apiurl:8}
 
-          curl -X POST -H "Accept: application/vnd.github.v3+json" ${apiurlpass}/statuses/${sha} -d '{"state":"failure", "context":"validate", "target_url":"http://somepath.goes.here"}'
+          context="validate"
+          targeturl="http://somepath.goes.here"
+          if fail; then
+            curl -X POST -H "Accept: application/vnd.github.v3+json" ${apiurlpass}/statuses/${sha} -d '{"state":"success", "context":"${context}","target_url":"${targeturl}"}'
+          else
+            curl -X POST -H "Accept: application/vnd.github.v3+json" ${apiurlpass}/statuses/${sha} -d '{"state":"failure", "context":"${context}","target_url":"${targeturl}"}'
+          fi
