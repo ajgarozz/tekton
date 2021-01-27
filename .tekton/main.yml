@@ -101,7 +101,7 @@ spec:
     - name: revision
   steps:
     - name: git-sync
-      image: $(params.EXECUTION_IMG_TAG)
+      image: ibmcom/pipeline-base-image:2.6
       command:
         - bash
       args:
