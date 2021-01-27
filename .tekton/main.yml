@@ -112,7 +112,8 @@ spec:
           revision="$(params.revision)"
           
           REPO_URL=${USER_GIT_REPO:0:8}${gitApiKey}@${USER_GIT_REPO:8}
-          git clone --depth 1 -b $(echo "${revision}" | cut -d "/" -f 3) ${REPO_URL} /workspace/
+          git clone ${REPO_URL} /workspace/
+          git checkout $(echo "${revision}" | cut -d "/" -f 3)
           
           cd /workspace/
           echo "export GIT_BRANCH=$(git branch -a | grep ^* | cut -d " " -f 2)" >> git.props
